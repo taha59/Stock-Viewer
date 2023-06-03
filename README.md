@@ -5,7 +5,7 @@ pip install sqlite3
 pip install alpaca-trade-api
 ```
 ## Get API keys
-To run populate_stocks.py and populate_prices.py successfully, you would need an API key and secret key inside creds.py file.
+To run populate_stocks.py and populate_prices.py successfully, you would need an API key and secret key inside const.py file.
 The step-by-step guide is as follows:
 1. Create an account on https://app.alpaca.markets/signup if you don't have an account already.
 2. After logging in to the account, click on 'Generate Key' to get an API key and the secret key.
