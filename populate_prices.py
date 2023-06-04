@@ -11,12 +11,10 @@ cursor.execute("""
     SELECT id, symbol, name From stock
 """)
 
+#fetch the rows containing id symbol and the name from the stock table
 rows = cursor.fetchall()
 
-symbols = [row['symbol'] for row in rows]
-
-for row in rows:
-    symbols.append(row['symbol'])
+symbols = []
 
 #make a dictionary to map the ids to the symbols so that we can do a quick lookup of ids while inserting in database
 stock_dict = {}
@@ -24,9 +22,6 @@ for row in rows:
     symbol = row['symbol']
     symbols.append(symbol)
     stock_dict[symbol] = row['id']
-
-#create a list of symbols
-symbols = [row['symbol'] for row in rows]
 
 api = tradeapi.REST(const.API_KEY, const.SECRET_KEY, const.BASE_URL)
 
