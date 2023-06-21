@@ -16,23 +16,18 @@ api = tradeapi.REST(const.API_KEY, const.SECRET_KEY, base_url=const.BASE_URL)
 assets = api.list_assets()
 
 for asset in assets:
+    #split the assets and names into 2  SHIB/USD --> SHIB and USD
+    split_symbols = asset.symbol.split("/")
+    split_names = asset.name.split("/")
 
-    try:
-        if asset.status == 'active' and asset.tradable and asset.symbol not in symbols:
-            #split the assets into 2  SHIB/USD --> SHIB and USD
-            split_symbols = asset.symbol.split("/")
+    for i in range(len(split_symbols)):
+        try:
+            if asset.status == 'active' and asset.tradable and split_symbols[i] not in symbols:
+                cursor.execute("INSERT INTO stock (symbol, name, exchange) VALUES (?, ?, ?)", (split_symbols[i], split_names[i], asset.exchange))
 
-            if len(split_symbols) == 2:
-                symbol1 = split_symbols[0]
-                symbol2 = split_symbols[1]
-                cursor.execute("INSERT INTO stock (symbol, name) VALUES (?, ?)", (symbol1, asset.name))
-                cursor.execute("INSERT INTO stock (symbol, name) VALUES (?, ?)", (symbol2, asset.name))
-            else:
-                cursor.execute("INSERT INTO stock (symbol, name) VALUES (?, ?)", (asset.symbol, asset.name))
-
-    except Exception as e:
-        print(asset.symbol)
-        print (e)
+        except Exception as e:
+            print(asset.symbol)
+            print (e)
 
 print("finished populating the database")
 connection.commit()

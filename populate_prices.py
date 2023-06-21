@@ -1,6 +1,7 @@
 import alpaca_trade_api as tradeapi
 from alpaca_trade_api.rest import TimeFrame
 import sqlite3, const
+from datetime import date, datetime, timedelta
 
 connection = sqlite3.connect(const.DATABASE_PATH)
 connection.row_factory = sqlite3.Row
@@ -26,17 +27,22 @@ for row in rows:
 api = tradeapi.REST(const.API_KEY, const.SECRET_KEY, const.BASE_URL)
 
 chunk_size = 200
+counts = {}
 
-#loop in chunks of 200 to evade overcome the issue of 200 api requests at a time
+#loop in chunks of 200 to evade overcome the issue of 200 api requests per minute
 for i in range(0, len(symbols), chunk_size):
     symbol_chunk = symbols[i:i+chunk_size]
-    barsets = api.get_bars(symbol_chunk, TimeFrame.Day, "2023-05-31", "2023-05-31")
+
+    # fifteenMinuteBefore = datetime.now() - timedelta(minutes=16)  # Subtract one day from the current date
+    # # fifteenMinuteBefore_isoformat = fifteenMinuteBefore.isoformat()  # Convert the date to ISO format
+
+    # print(fifteenMinuteBefore.isoformat())  # Output: YYYY-MM-DD
+
+    barsets = api.get_bars(symbol_chunk, TimeFrame.Day, "2023-05-20", "2023-06-20")
 
     #store stock prices for each stock symbol
-    counts = {}
     for bar in barsets:
-
-        if bar.S not in counts or counts[bar.S] == 1:
+        try:
             print ("On symbol:", bar.S)
 
             stock_id = stock_dict[bar.S]
@@ -45,11 +51,7 @@ for i in range(0, len(symbols), chunk_size):
             INSERT INTO stock_price (stock_id, date, open, high, low, close, volume)
             VALUES (?, ?, ?, ?, ?, ?, ?)
             """, (int(stock_id), bar.t.date(), bar.o, bar.h, bar.l, bar.c, bar.v))
-        
-
-        if bar.S in counts:
-            counts[bar.S] += 1
-        else:
-            counts[bar.S] = 1
+        except Exception as e:
+            print(bar.S)
 
 connection.commit()
