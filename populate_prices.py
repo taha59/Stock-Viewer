@@ -29,7 +29,7 @@ api = tradeapi.REST(const.API_KEY, const.SECRET_KEY, const.BASE_URL)
 chunk_size = 200
 counts = {}
 
-#loop in chunks of 200 to evade overcome the issue of 200 api requests per minute
+#loop in chunks of 200 to overcome the issue of 200 api requests per minute
 for i in range(0, len(symbols), chunk_size):
     symbol_chunk = symbols[i:i+chunk_size]
 

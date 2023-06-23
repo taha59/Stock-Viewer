@@ -3,8 +3,9 @@
 ```
 pip install sqlite3
 pip install alpaca-trade-api
-pip3 install fastapi uvicorn
-pip3 install jinja2
+pip install fastapi uvicorn
+pip install jinja2
+pip install python-multipart
 ```
 ## Get API keys
 To run populate_stocks.py and populate_prices.py successfully, you would need an API key and secret key inside const.py file.
