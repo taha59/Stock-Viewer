@@ -1,4 +1,4 @@
-# Stock-Market-Tracker
+# Stock-Viewer
 # Installation
 ```
 pip install sqlite3
